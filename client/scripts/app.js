@@ -1,4 +1,5 @@
 // YOUR CODE HERE:
+var friends = {};
 var app = {
   server: "https://api.parse.com/1/classes/chatterbox"
 };
@@ -64,19 +65,21 @@ app.addMultipleMessages = function (messages) {
     if(onemessage.username){
       onemessage.username = escape(onemessage.username)
     }
-    $('#chats').append('<div room='+onemessage.roomname+'>'+onemessage.username+": "+onemessage.text+'</div>');
+    $('#chats').append('<div class="chat" room='+onemessage.roomname+'>'+'<div class="username">'
+      +onemessage.username+':</div>'+onemessage.text+'</div>');
   });
+  addfriendlistener();
 };
 
-app.fetch = function() {
+app.fetch = function(callback) {
   $.ajax({
     // This is the url you should use to communicate with the parse API server.
     url: 'https://api.parse.com/1/classes/chatterbox',
     type: 'GET',
     contentType: 'application/json',
     success: function (dataRetrieved) {
-      rooms(dataRetrieved.results);
-      app.addMultipleMessages (dataRetrieved.results);
+      callback(dataRetrieved.results);
+      app.changeroom();
       console.log('chatterbox: Message received');
     },
     error: function (data) {
@@ -85,6 +88,7 @@ app.fetch = function() {
     }
   });
 };
+
 
 app.clearMessages = function (){
   $('#chats').children().remove();
@@ -109,26 +113,44 @@ function rooms(data) {
 $('body').prepend('<button class="refresh">Refresh</button>')
 $('.refresh').on('click', function() {
   app.clearMessages();
-  app.fetch();
-  //$('#chats div').load('../index.html', function() {app.changeroom()});
-  setTimeout(function() {app.changeroom()},500);
+  app.fetch(function(data) {
+    rooms(data);
+    app.addMultipleMessages(data);
+  });
 });
 
 $('.submit').on('click', function() {
   message.text = $('#message').val();
   app.handleSubmit(message);
-  app.fetch();
-
+  app.fetch(function(data) {
+    rooms(data);
+    app.addMultipleMessages(data);
+  });
 });
+
+function addfriendlistener() {
+  $('.username').on('click', function() {
+    var friendName = this.innerText
+    if(friends[friendName]) {
+      return;
+    }
+    friends[friendName] = true;
+    _.each($('.chat'), function(chat) {
+      if(chat.children[0].innerText in friends) {
+        chat.classList.add('bold');
+      }    
+    });
+  });
+}
 
 app.changeroom = function() {
   var currentroom = $('select').val();
   if(currentroom==='lobby') {
-    _.each($('#chats div'), function(d) {
+    _.each($('#chats >div'), function(d) {
       d.hidden = false;
     });
   } else {
-    _.each($('#chats div'), function(d) {
+    _.each($('#chats >div'), function(d) {
       if(currentroom !== d.getAttribute('room')) {
         d.hidden = true;
       } else {
@@ -141,7 +163,6 @@ app.changeroom = function() {
 function escape(message) {
   // debugger
   return message.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
-  // return message.replace(/[\ \!\@\=\'\"\`\<\>\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, function(i) {
     return '&#'+i.charCodeAt(0)+';';
   });
 }

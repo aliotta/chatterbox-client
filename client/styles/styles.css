@@ -83,3 +83,7 @@ input[type=text] {
 .spinner img {
     padding: 10px;
 }
+
+.bold {
+    font-weight: bold;
+}
