@@ -52,11 +52,12 @@ form {
     margin-bottom: 20px;
 }
 
-form input[type=text] {
+input[type=text] {
     margin-right: 10px;
     width: 70%;
     font-size: 12px;
     padding: 5px;
+    font-size: 12pt;
 }
 
 .chat {
