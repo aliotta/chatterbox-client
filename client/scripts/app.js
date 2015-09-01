@@ -39,7 +39,7 @@ app.send =function(message) {
 };
 
 app.addRoom = function(room) {
-  $('#roomSelect').append('<div>'+message.roomname+'</div>')
+  $('#roomSelect').append('<li>'+message.roomname+'</li>')
 
 }
 app.addMessage = function (message) {
@@ -60,13 +60,11 @@ app.addMultipleMessages = function (messages) {
   _.each(messages, function(onemessage,index) {
     if(onemessage.text) {
       onemessage.text = escape(onemessage.text);
+    }
     if(onemessage.username){
       onemessage.username = escape(onemessage.username)
     }
-      // $('#chats').append('<div>'+": "+onemessage.text+'</div>');
-
-      $('#chats').append('<div>'+onemessage.username+": "+onemessage.text+'</div>');
-    }
+    $('#chats').append('<div room='+onemessage.roomname+'>'+onemessage.username+": "+onemessage.text+'</div>');
   });
 };
 
@@ -81,10 +79,10 @@ app.fetch = function() {
       app.addMultipleMessages (dataRetrieved.results);
       console.log('chatterbox: Message received');
     },
-    /*error: function (data) {
+    error: function (data) {
       // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
       console.error('chatterbox: Failed to receive message');
-    }*/
+    }
   });
 };
 
@@ -96,11 +94,10 @@ app.clearMessages = function (){
 var room = {};
 function rooms(data) {
   _.each(data, function(msg) {
-
     if(msg.roomname){
       msg.roomname = escape(msg.roomname);
     } else {
-      msg.roomname = "globalRoom"
+      msg.roomname = "lobby"
     }
     if(!room[msg.roomname]){
       $('.room').append('<option>'+msg.roomname+'</option>');
@@ -109,26 +106,37 @@ function rooms(data) {
   });
 };
 
-
 $('body').prepend('<button class="refresh">Refresh</button>')
 $('.refresh').on('click', function() {
   app.clearMessages();
   app.fetch();
+  //$('#chats div').load('../index.html', function() {app.changeroom()});
+  setTimeout(function() {app.changeroom()},500);
 });
 
 $('.submit').on('click', function() {
   message.text = $('#message').val();
-  debugger
   app.handleSubmit(message);
   app.fetch();
-  // if(message.text==='') {
-  //   return;
-  // }
-  // message.text = $('input')[0].value;
-  // app.clearMessages();
-  // app.send(message);
-  // app.fetch();
+
 });
+
+app.changeroom = function() {
+  var currentroom = $('select').val();
+  if(currentroom==='lobby') {
+    _.each($('#chats div'), function(d) {
+      d.hidden = false;
+    });
+  } else {
+    _.each($('#chats div'), function(d) {
+      if(currentroom !== d.getAttribute('room')) {
+        d.hidden = true;
+      } else {
+        d.hidden = false;
+      }
+    });
+  }
+}
 
 function escape(message) {
   // debugger
