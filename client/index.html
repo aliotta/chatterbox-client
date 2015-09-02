@@ -3,11 +3,15 @@
   <head>
     <meta charset="utf-8">
     <title>chatterbox</title>
-    <link rel="stylesheet" href="styles/styles.css">
+<!--     <link rel="stylesheet" href="bower_components/materialize/dist/css/materialize.min.css">
+    <link rel="stylesheet" href="bower_components/materialize/templates/masonry-template/css/style.css">
+ -->    <link rel="stylesheet" href="styles/styles.css">
 
     <!-- dependencies -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/underscore/underscore-min.js"></script>
+    <script src="bower_components/backbone/backbone.js"></script>
+    <script src="bower_components/materialize/dist/js/materialize.min.js"></script>
     <!-- your scripts -->
     <script src="env/config.js"></script>
   </head>
@@ -17,17 +21,17 @@
       <!-- Your HTML goes here! -->
       <!-- <form id="messageform"> -->
       <span>Room: </span>
-      <select class="room" id="roomSelect" onchange="app.changeroom()"> 
+      <select class="room" id="roomSelect" onchange="changeroom()"> 
       </select> <br><br>
       Message: 
       <!-- <form action="#" id="send" method="post"> -->
-      <input type="text" name="message" id="message"/>
-      <input type="submit" name="submit" class="submit"/>
+      <input type="text" name="message" id="message" class="validate"/>
+      <input type="submit" name="submit" class="submit validate"/>
       <!-- </form> -->
       <!-- <input type="text" value="" id = "message"> -->
       <!-- </form> -->
     </div>
     <div id="chats"></div>
   </body>
-  <script src="scripts/app.js"></script>
+  <script src="scripts/refactor-app.js"></script>
 </html>
