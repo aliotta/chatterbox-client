@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <title>chatterbox</title>
-<!--     <link rel="stylesheet" href="bower_components/materialize/dist/css/materialize.min.css">
+<!--     <link rel="stylesheet" href="styles/styles.css">
+ -->    <link rel="stylesheet" href="bower_components/materialize/dist/css/materialize.min.css">
     <link rel="stylesheet" href="bower_components/materialize/templates/masonry-template/css/style.css">
- -->    <link rel="stylesheet" href="styles/styles.css">
 
     <!-- dependencies -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -16,22 +16,27 @@
     <script src="env/config.js"></script>
   </head>
   <body>
-    <div id="main">
-      <h1>chatterbox</h1>
-      <!-- Your HTML goes here! -->
-      <!-- <form id="messageform"> -->
-      <span>Room: </span>
-      <select class="room" id="roomSelect" onchange="changeroom()"> 
-      </select> <br><br>
-      Message: 
-      <!-- <form action="#" id="send" method="post"> -->
-      <input type="text" name="message" id="message" class="validate"/>
-      <input type="submit" name="submit" class="submit validate"/>
-      <!-- </form> -->
-      <!-- <input type="text" value="" id = "message"> -->
-      <!-- </form> -->
+    <div class="container col l3">
+      <button class="refresh btn waves-effect">Refresh</button>
+      <div id="main">
+        <h1>chatterbox</h1>
+        <!-- Your HTML goes here! -->
+        <!-- <form id="messageform"> -->
+        <span>Room: </span>
+        <select class="room dropdown-button btn" id="roomSelect" onchange="changeroom()"> 
+        </select> <br><br>
+        Message: 
+        <!-- <form action="#" id="send" method="post"> -->
+        <div class="input-field">
+          <input type="text" name="message" id="message" class="validate" placeholder="Post your messages here!"/>
+        </div>
+        <button name="submit" class="submit  btn waves-effect">Submit</button>
+        <!-- </form> -->
+        <!-- <input type="text" value="" id = "message"> -->
+        <!-- </form> -->
+      </div>
+      <div id="chats"></div>
     </div>
-    <div id="chats"></div>
   </body>
   <script src="scripts/refactor-app.js"></script>
 </html>

@@ -46,9 +46,10 @@ var MessagesView = Backbone.View.extend({
   },
   render: function() {
     this.model.clearMessages();
+    this.$el.addClass('collection');
     this.$el.append(this.model.map(function(message) {
       rooms(message);
-      return ['<div class="chat" room='+message.get('roomname')+'>',
+      return ['<div class="chat collection-item" room='+message.get('roomname')+'>',
         '<div class="username">'+message.get('username')+':</div>',
       message.get('text')+'</div>'].join('')
     }))
@@ -60,13 +61,12 @@ var MessagesView = Backbone.View.extend({
 });
 
   var messages = new Messages();
-  // messages.loadMessages();
+  messages.loadMessages();
   var messagesView; 
   messagesView = new MessagesView({model: messages});
   $('#chats').append(messagesView.render());
 
 
-$('body').prepend('<button class="refresh">Refresh</button>')
 $('.refresh').on('click', function() {
   // debugger
   messages.loadMessages();
@@ -138,7 +138,7 @@ function addfriendlistener() {
 function turnfriendsbold() {
   _.each($('.chat'), function(chat) {
     if(chat.children[0].innerText in friends) {
-      chat.classList.add('bold');
+      chat.children[0].classList.add('blue-text');
     }    
   });
 }
